@@ -13,7 +13,8 @@ module Wice #:nodoc:
                     :fire_event,
                     :close_calendar_event_name,
                     :the_other_datepicker_id_to,
-                    :the_other_datepicker_id_from
+                    :the_other_datepicker_id_from,
+                    :additional_input_classes
     end
 
     def date_calendar_bs(calendar_data)  #:nodoc:
@@ -30,10 +31,11 @@ module Wice #:nodoc:
           'data-date-language'  => I18n.locale,
           'data-date-autoclose' => true,
           'data-date-format'    => Wice::ConfigurationProvider.value_for(:DATE_FORMAT_BOOTSTRAP),
-          'placeholder'         => placeholder
+          'placeholder'         => placeholder,
+          'class'               => 'form-control input-sm '
       }
 
-      text_field_tag_options['class'] = 'form-control input-sm'
+      text_field_tag_options['class'] += calendar_data.additional_input_classes if calendar_data.additional_input_classes.present?
 
       if Rails.env.development?
         text_field_tag_options['class'] += ' check-for-bsdatepicker'
@@ -67,6 +69,7 @@ module Wice #:nodoc:
         calendar_data.date_div_id               = calendar_data.dom_id + '_date_view'
         calendar_data.close_calendar_event_name = "wg:calendarChanged_#{options[:grid_name]}"
         calendar_data.fire_event                = options[:fire_event]
+        calendar_data.additional_input_classes  = options[:additional_input_classes]
       end
     end
   end
